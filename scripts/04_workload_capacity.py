@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-# waktu proses dalam menit
+# approval times in minutes
 df_join['processing_time_minutes'] = (df_join['waktu_respon'] - df_join['waktu_permohonan_real']).dt.total_seconds()/60
 
 daily_workload = (
@@ -21,18 +21,20 @@ plt.figure(figsize=(12, 6))
 #Create Plot
 plt.plot(daily_workload['waktu_permohonan_real'], daily_workload['jumlah_permohonan'], label='Daily Requests', color='#1f77b4', linewidth=1.5)
 
-#Adding label 
 for i, row in top_5.iterrows():
+    # Ambil tanggal dan format ke string (Contoh: 15 Feb)
+    date_label = row['waktu_permohonan_real'].strftime('%d %b') 
+    
     plt.annotate(
-        f"{int(row['jumlah_permohonan'])}", 
+        f"{date_label}\n({int(row['jumlah_permohonan'])})", # Menampilkan Tanggal dan Angka
         (row['waktu_permohonan_real'], row['jumlah_permohonan']),
         textcoords="offset points", 
-        xytext=(0, 10), # Posisi teks 10 poin di atas titik
+        xytext=(0, 15), # Naikkan sedikit agar teks dua baris tidak menabrak titik
         ha='center', 
-        fontsize=10, 
+        fontsize=9, 
         fontweight='bold',
-        color='red', # Warna merah agar mencolok
-        arrowprops=dict(arrowstyle='->', color='red', lw=1) # Menambahkan panah kecil
+        color='red', 
+        arrowprops=dict(arrowstyle='->', color='red', lw=1)
     )
 
 #Complement the attribute
@@ -43,27 +45,7 @@ plt.xticks(rotation=45)
 plt.grid(True, linestyle='--', alpha=0.6)
 
 #Giving margin
-plt.ylim(daily_workload['jumlah_permohonan'].min() - 2, daily_workload['jumlah_permohonan'].max() + 5)
+plt.ylim(0, daily_workload['jumlah_permohonan'].max() * 1.2)
 
 plt.tight_layout()
-plt.show()
-
-#workload vs approval time (port)
-capacity_analysis = df_join.groupby('PELABUHAN').agg(
-    total_request=('nomor_pkk','count'),
-    avg_processing_time=('approval_hours','mean')
-).reset_index()
-
-
-capacity_analysis
-plt.figure(figsize=(8,6))
-
-plt.scatter(
-    capacity_analysis['total_request'],
-    capacity_analysis['avg_processing_time']
-)
-
-plt.xlabel("Total Requests")
-plt.ylabel("Average Processing Time (minutes)")
-plt.title("Workload vs Capacity")
 plt.show()

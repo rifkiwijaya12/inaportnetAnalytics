@@ -14,20 +14,35 @@ Prior to analysis, data preprocessing was conducted to examine the dataset struc
 
 inaportnet-analysis
 │
+
 ├── data
+
 │   ├── raw
+
 │   └── processed
+
 │
+
 ├── scripts
+
 │   ├── data_collection.py
+
 │   ├── traffic_analysis.py
+
 │   ├── service_performance.py
+
 │   ├── sla_risk_analysis.py
+
 │   ├── workload_capacity_analysis.py
+
 │   └── port_classification.py
+
 │
+
 ├── results
+
 │
+
 └── README.md
 
 # Potential insight
